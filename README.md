@@ -46,28 +46,28 @@ Experiência na área de desenvolvimento web, produção multimídia e fotografi
 **###Matheus Torres Chiarato**
 Possui vasta experiência com o Bootstrap Framework e linguagens Client-Side como Ajax e Jquery, podendo assim trazer uma ótima experiência para o cliente.
 
-**##DESENVOLVIMENTO**
+**#DESENVOLVIMENTO**
 
 Escolhemos trabalhar com a linguagem Python, devido a versatilidade da mesma, podendo integrar-se com a aplicação Web facilmente, podendo consumir API's e navegar em sites diversos. Por ser uma linguagem de rápido aprendizado e fácil desenvolvimento, tendo foco na Área de Segurança, escolhemos a mesma pois abrange o escopo do curso.
 A linguagem nos traz diversas bibliotecas, facilitando o desenvolvimento do projeto, apenas manipulando suas funções e modificando conforme a necessidade do cliente.
 
-**##API's**
+**#API's**
 
-**###Google Search**
+**##Google Search**
 Mantido pelo usuário Mvilas em pypi.org, biblioteca leve trabalhando retornando as URL's. Não sendo homologada pela Google, em grandes pesquisas ela pode demorar um tempo superior a própria API do Google API Client.
 
-**###Regex**
+**##Regex**
 Biblioteca interna do Python, utilizada para trabalhar com expressões regulares.
 
-**###Requests**
+**##Requests**
 Biblioteca HTTP mantida pela Python Software Foundation, utilizada para trabalhar a navegação web, utilizando GET, POST dentre outros.
 
-**##DELIVERY**
+**#DELIVERY**
 
 Disponibilizaremos a plataforma via Web, visando a facilidade de utilização, nas mais diversas situações que o profissional de Segurança pode enfrentar no seu dia a dia.
 Buscando disponibilidade criaremos toda a aplicação em container para garantir estabilidade e rápida implantação. Este tipo de ambiente nos permite compatibilidade multiplataforma.
 
-**##CONCLUSÃO**
+**#CONCLUSÃO**
 
 O objetivo do Leakbuster e trazer uma nova solução de monitoramento para o mercado totalmente inovadora, de fácil implementação e de mais fácil uso, visando a satisfação e o retorno que o cliente espera.
 Nossa missão estará concluída a partir do momento que mitigarmos a quantidade de vazamentos de empresas expostos na internet, gerando assim uma economia monetária nas organizações que utilizam nossa solução.
