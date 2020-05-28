@@ -1,3 +1,5 @@
+**PT-BR**
+
 **LEAKBUSTER**
 
 O Leakbuster é um agente de monitoramento continuo de vazamentos de dados, construído principalmente em
@@ -73,3 +75,72 @@ Buscando disponibilidade criaremos toda a aplicação em container para garantir
 O objetivo do Leakbuster e trazer uma nova solução de monitoramento para o mercado totalmente inovadora, de fácil implementação e de mais fácil uso, visando a satisfação e o retorno que o cliente espera.
 Nossa missão estará concluída a partir do momento que mitigarmos a quantidade de vazamentos de empresas expostos na internet, gerando assim uma economia monetária nas organizações que utilizam nossa solução.
 Com o não vazamento ou o vazamento sendo detectado de forma rápida, as empresas podem tomar decisões para impedir fraudes em seu sistema, trazendo assim credibilidade e confiança ao mercado.
+
+
+------------------------------------------------------------------------------------------------------------------------------------
+**EN**
+
+**LEAKBUSTER**
+
+Leakbuster is a continuous data leak monitoring agent, built primarily in Python. Leakbuster implements the ability to search online for potential enterprise data leaks, such as access credentials and other sensitive data.
+
+**#TEAM**
+
+**##developers ##**
+
+D3FCON6 developers were chosen for their performance, quality of applications and agility in development, we always look for the best professionals in the area so that our client always has the best solution at his disposal.
+
+**###Leonardo Ruiz Orabona**
+Formed in Analysis and Development of Systems by FIAP in the year 2018, since then has been acting as Developer of embedded applications and API's Web. A great enthusiast of new technologies decided to re-enter a new course in cyber defense to improve his knowledge in development and ensure the quality of his previous applications.
+
+**###Matheus Torres Chiarato**
+Formed in Systems Analysis and Development by UMC in the year 2019, worked in the area of e-commerces development since 2018 using PHP and Web APIs. Aiming at the security of its applications and infrastructure of the company I entered the course of cyber defense to improve and master the concepts of the area of information security.
+
+**##Infrastructure**
+
+Seeking a better way to bring our solution to the customer, our infrastructure team is focused on developing an environment of easy access and high availability. Using the latest market solutions, providing infrastructure compatible with our application.
+
+**###João Vitor Diogo**
+Graduated in IT technician by Senac in 2015 and working for 4 years in the area of server infrastructure. With more than 2 years studying and working in the security area, decided to enter the cyber defense course to better enter the job market. With experience in ERP software and web servers.
+
+**###Julia Camilly Rodrigues de lima**
+Graduated in the technical course of computer networks by Senai in the year 2019, has been working in the area of security management and connectivity. Certified in NSE-1, NSE-2, NSE-3 by Fortinet. Decided to enter the course of cyber defense to specialize the concepts of the area of information security
+
+**###Rannyere Andrade**
+IT Technician by SENAC in the year 2019, always working with focus on security in business infrastructures, from Technical Support to Project Implementation. SysAdmin by 4Linux, working with Linux server management in Hypervisor Citrix-Xenserver and Hyper-V.
+
+**##Designer**
+
+Leakbuster's designers have been assigned due to their vast experience with front-end development, i.e. they can bring a better user experience by having an intuitive and easy to use application.
+
+**###Gabriel Correa Redigulo**
+Formed mainly in technical courses the main ones being web designer, game designer and NetSecurity, studying Cyber Defence in the institution FIAP, I worked in the area of communication and information for 1 year and a half, enthusiastic about new technologies and how information and technology is already rooted in our culture, believing that the future will be in how the information and handling of it will be safe and reliable.
+
+**###Leonardo Ruiz Orabona**
+Experience in web development, multimedia production and digital photography, UX.
+
+**###Matheus Torres Chiarato**
+Has extensive experience with Bootstrap Framework and Client-Side languages such as Ajax and Jquery, thus bringing a great experience to the client.
+
+**#DEVELOPMENT**
+
+We chose to work with the Python language, due to its versatility, being able to integrate with the Web application easily, being able to consume API's and navigate in several sites. For being a language of fast learning and easy development, having focus on the Area of Security, we chose the same because it covers the scope of the course. The language brings us several libraries, facilitating the development of the project, just manipulating its functions and modifying according to the client's needs.
+
+**#API's**
+
+**##Google Search**
+Kept by user Mvilas on pypi.org, light library working by returning URLs. Not being approved by Google, in large searches it can take longer than the Google Client API itself.
+
+**##Regex**
+Internal Python library, used to work with regular expressions.
+
+**##Requests
+HTTP library maintained by the Python Software Foundation, used to work with web browsing, using GET, POST among others.
+
+**#DELIVERY**
+
+We will make the platform available via the Web, aiming at ease of use in the most diverse situations that the Security professional can face in his day to day. Searching for availability we will create the entire application in container to ensure stability and rapid deployment. This type of environment allows us to have multi-platform compatibility.
+
+**#CONCLUSION**
+
+The goal of Leakbuster is to bring a new monitoring solution to the market that is totally innovative, easy to implement and easier to use, aiming at the satisfaction and return that the customer expects. Our mission will be completed as soon as we mitigate the amount of leaks from companies exposed on the Internet, thus generating monetary savings in organizations that use our solution. With no leak or leak being detected quickly, companies can make decisions to prevent fraud in their system, thus bringing credibility and confidence to the market.
