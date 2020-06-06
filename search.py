@@ -2,46 +2,57 @@
 
 import argparse as arg
 import re
+import subprocess as command
 from time import sleep
 from filter import filter_data
+import os.path
 
 try:
     from googlesearch import search
 except ImportError:
-    print(
-        "No module named 'google' found. Try run the following commands: pip install beautifulsoup4 and pip install google")
+    print("No module named 'google' found. Try run the following commands: pip install beautifulsoup4 and pip install google")
+
+
+if not os.path.exists("downloads"):
+    command.call(["mkdir", "downloads"])
+if not os.path.exists("csv"):
+    command.call(["mkdir", "csv"])
+
 
 print("\n[+]Search on google via terminal created by th3r4ven\n")
+
+# Function responsible for handling arguments,
+# here you can create, delete and modify all arguments using by this program.
 
 
 def get_arguments(tld):
 
-    # Function responsible for handling arguments,
-    # here you can create, delete and modify all arguments using by this program
-
     opt = arg.ArgumentParser()
     opt.add_argument("-s", "--search", dest="search",
-                     help="Query to search on google. E.g: +@gmail.com site:pastebin.com")
-    opt.add_argument("-d", dest="domain", help="Top level domain. Use -tld to se all the Top domain level.")
+                     help=" Query to search on google. E.g: +@gmail.com site:pastebin.com")
+    opt.add_argument("-top", dest="top", help=" Top level domain. Use -tld to se all the Top domain level.")
+    opt.add_argument("-d", action="store_true", dest="domain", help=" Target sites to focus the search.")
 
-    opt.add_argument("--tld", action="store_true", help="Show e.g. on top level domain. Eg: br: google.com.br.")
+    opt.add_argument("--tld", action="store_true", help=" Show e.g. on top level domain. Eg: br: google.com.br.")
 
-    opt.add_argument("-l", "--lang", dest="lang", help="Google search language, E.g.: pt-br, en, es.")
-    opt.add_argument("-t", dest="time", help="Time limit to filter the search, use --tbs for more info.")
-    opt.add_argument("-min", dest="min", help="Time limit to filter the search, use --tbs for more info.")
-    opt.add_argument("-max", dest="max", help="Time limit to filter the search, use --tbs for more info.")
+    opt.add_argument("-l", "--lang", dest="lang", help=" Google search language, E.g.: pt-br, en, es.")
+    opt.add_argument("-t", dest="time", help=" Filter the search by sec., min., days, months and year, use --tbs for more info.")
+    opt.add_argument("-min", dest="min", help=" Filter the search at a specific date, use --tbs for more info.")
+    opt.add_argument("-max", dest="max", help=" Filter the search at a specific date, use --tbs for more info.")
 
-    opt.add_argument("--tbs", action="store_true", help="Show e.g. on time search filter.")
+    opt.add_argument("--tbs", action="store_true", help=" Show e.g. on time search filter.")
     opt.add_argument("--safe", action="store_true", help=" Activate safe search.")
 
-    opt.add_argument("-n", "--number", dest="number", help="Number of resuls per page.")
-    opt.add_argument("--start", dest="start", help="First result to retrieve.")
-    opt.add_argument("--stop", dest="stop", help="Last result to retrieve.")
+    opt.add_argument("-n", "--number", dest="number", help=" Number of resuls per page.")
+    opt.add_argument("--start", dest="start", help=" First result to retrieve.")
+    opt.add_argument("--stop", dest="stop", help=" Last result to retrieve.")
     opt.add_argument("--pause", dest="pause",
-                     help="Lapse between HTTP requests, a lapse to short may cause google block your IP.")
+                     help=" Lapse between HTTP requests, a lapse to short may cause google block your IP.")
     opt.add_argument("-c", "--country", dest="country",
                      help="Country to focus search on, similar to changing the TLD.")
-    opt.add_argument("-u", "--user_agent", dest="agent", help="User agent for the HTTP requests.")
+    opt.add_argument("-u", "--user_agent", dest="agent", help=" User agent for the HTTP requests.")
+
+    opt.add_argument("--csv", action="store_true", help=" Save all results in csv files.")
 
     opt.add_argument("--date", action="store_true", help=" Sort search by date.")
     opt.add_argument("--relevance", action="store_true", help=" Sort search by relevance.")
@@ -78,23 +89,33 @@ def get_arguments(tld):
         opt.error("\n[-]\tPlease, insert a query to search on google. Use --help for more\n")
         exit()
 
-    if options.domain:
+    if options.top:
         try:
             if tld[options.domain] is not None:
-                options.domain = tld[options.domain]
+                options.top = tld[options.top]
         except KeyError:
             print("[-]\tYour TLD is incorrect, use --tld to see the available options")
             exit()
 
     return options
 
+# Function responsible for validating args or putting default values on then.
 
-def valid_args(opt):
 
-    if not opt.domain:
-        opt.domain = "com"
+def valid_args(opt, domains):
+
+    if not opt.top:
+        opt.top = "com"
     if not opt.lang:
         opt.lang = "en"
+    if opt.domain:
+        resp = "y"
+        while resp == "y":
+            domains.append(input("[+] Insert a domain to focus your search: "))
+            resp = input("\n Want to search in others domains too? (y/n)")
+    else:
+        domains.append("pastebin.com")
+        domains.append("ghostbin.co")
 
     if not opt.min or not opt.max:
         if not opt.time:
@@ -120,13 +141,13 @@ def valid_args(opt):
     else:
         opt.stop = int(opt.stop)
     if not opt.pause:
-        opt.pause = 3.0
+        opt.pause = 2.0
     else:
         opt.pause = float(opt.pause)
     if not opt.country:
         opt.country = ""
     if not opt.agent:
-        opt.agent = USER_AGENT
+        opt.agent = ''
     if not opt.date:
         opt.date = ",sdb:1"
     else:
@@ -138,30 +159,41 @@ def valid_args(opt):
 
     return opt
 
+# Function responsible for searching in google and return the URL, then send to other function to filter the results.
 
-def google_search(options):
+
+def google_search(options, domains):
+    print("[+]\tSearch in progress...\n")
+
     try:
-        for url in search(options.search, tld=options.domain, lang=options.lang,
-                          tbs=str(options.time) + str(options.date) + str(options.relevance), safe='off',
-                          num=options.number, start=options.start, stop=options.stop, domains=None, pause=2.0,
-                          country=options.country, user_agent=options.agent):
-            filter_data(url)
+        for url in search(options.search, tld=options.top, lang=options.lang,
+               tbs=str(options.time) + str(options.date) + str(options.relevance), safe='off',
+               num=options.number, start=options.start, stop=options.stop, domains=domains, pause=2.0,
+               country=options.country, user_agent=options.agent):
+            filter_data(url, options.csv)
+        if options.domain:
+            print("[*]\t If your search don't return any URL's try search a different query or try other domains")
     except KeyboardInterrupt:
-        pass
+        exit()
 
 
-def google_safe_search(options):
+# Function responsible for safe searching in google and return the URL,
+# then send to other function to filter the results.
+
+
+def google_safe_search(options, domains):
+    print("[+]\tSafe search in progress...\n")
     try:
-        for url in search(options.search, tld=options.domain, lang=options.lang,
+        for url in search(options.search, tld=options.top, lang=options.lang,
                           tbs=options.time + options.date + options.relevance, safe='on',
-                          num=options.number, start=options.start, stop=options.stop, domains=None, pause=2.0,
+                          num=options.number, start=options.start, stop=options.stop, domains=domains, pause=2.0,
                           country=options.country, user_agent=options.agent):
-            filter_data(url)
+            filter_data(url, options.csv)
     except KeyboardInterrupt:
-        pass
+        exit()
 
 
-USER_AGENT = 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/78.0.3904.108 Safari/537.36'
+domain = []
 
 tld_domain_map = {
     'ac': 'ac', 'ad': 'ad', 'ae': 'ae',
@@ -234,9 +266,9 @@ tld_domain_map = {
 
 opt = get_arguments(tld_domain_map)
 
-opt = valid_args(opt)
+opt = valid_args(opt, domain)
 
 if opt.safe:
-    google_safe_search(opt)
+    google_safe_search(opt, domain)
 else:
-    google_search(opt)
+    google_search(opt, domain)
