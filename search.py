@@ -30,7 +30,7 @@ def get_arguments(tld):
     opt = arg.ArgumentParser()
     opt.add_argument("-s", "--search", dest="search",
                      help=" Query to search on google. E.g: +@gmail.com site:pastebin.com")
-    opt.add_argument("-top", dest="top", help=" Top level domain. Use --tld to se all the Top domain level.")
+    opt.add_argument("-top", dest="top", help=" Top level domain. Use -tld to se all the Top domain level.")
     opt.add_argument("-d", action="store_true", dest="domain", help=" Target sites to focus the search.")
 
     opt.add_argument("--tld", action="store_true", help=" Show e.g. on top level domain. Eg: br: google.com.br.")
