@@ -1,9 +1,9 @@
 import re
-import save_results
-from date import extract_date
+from google_search import save_results
+from google_search.date import extract_date
 
 
-def filter_two_dots(url, content, csv):
+def filter_two_dots(url, content):
     lista = []
     date = extract_date(content)
     lista.append(str(date) + ";" + url + ";\n\n")
@@ -23,22 +23,14 @@ def filter_two_dots(url, content, csv):
                 elif re.search(r':', senha):
                     senha = senha.split(':')[0]
 
-                if csv:
-                    lista.append(str(email) + ";" + str(senha) + ";\n")
-                else:
-                    lista.append(str(email) + "+" + str(senha) + "\n")
+                lista.append(str(email) + ";" + str(senha) + ";\n")
 
-    if csv:
-        file_name = url.split("/")[-1]
-        file_name = "csv/leakbuster_" + file_name.split(".")[0]
-        save_results.saveContentCSV(file_name, lista)
-    else:
-        file_name = url.split("/")[-1]
-        file_name = "downloads/leakbuster_" + file_name.split(".")[0]
-        save_results.saveContent(file_name, lista)
+    file_name = url.split("/")[-1]
+    file_name = "results/csv/leakbuster_" + file_name.split(".")[0]
+    save_results.saveContentCSV(file_name, lista)
 
 
-def filter_module(url, content, csv):
+def filter_module(url, content):
     lista = []
     date = extract_date(content)
     lista.append(str(date) + ";" + url + ";\n\n")
@@ -58,22 +50,14 @@ def filter_module(url, content, csv):
                 elif re.search(r':', senha):
                     senha = senha.split(':')[0]
 
-                if csv:
-                    lista.append(str(email) + ";" + str(senha) + ";\n")
-                else:
-                    lista.append(str(email) + "+" + str(senha) + "\n")
+                lista.append(str(email) + ";" + str(senha) + ";\n")
 
-    if csv:
-        file_name = url.split("/")[-1]
-        file_name = "csv/leakbuster_" + file_name.split(".")[0]
-        save_results.saveContentCSV(file_name, lista)
-    else:
-        file_name = url.split("/")[-1]
-        file_name = "downloads/leakbuster_" + file_name.split(".")[0]
-        save_results.saveContent(file_name, lista)
+    file_name = url.split("/")[-1]
+    file_name = "results/csv/leakbuster_" + file_name.split(".")[0]
+    save_results.saveContentCSV(file_name, lista)
 
 
-def filter_dot_comma(url, content, csv):
+def filter_dot_comma(url, content):
     lista = []
     date = extract_date(content)
     lista.append(str(date) + ";" + url + ";\n\n")
@@ -93,22 +77,14 @@ def filter_dot_comma(url, content, csv):
                 elif re.search(r':', senha):
                     senha = senha.split(':')[0]
 
-                if csv:
-                    lista.append(str(email) + ";" + str(senha) + ";\n")
-                else:
-                    lista.append(str(email) + "+" + str(senha) + "\n")
+                lista.append(str(email) + ";" + str(senha) + ";\n")
 
-    if csv:
-        file_name = url.split("/")[-1]
-        file_name = "csv/leakbuster_" + file_name.split(".")[0]
-        save_results.saveContentCSV(file_name, lista)
-    else:
-        file_name = url.split("/")[-1]
-        file_name = "downloads/leakbuster_" + file_name.split(".")[0]
-        save_results.saveContent(file_name, lista)
+    file_name = url.split("/")[-1]
+    file_name = "results/csv/leakbuster_" + file_name.split(".")[0]
+    save_results.saveContentCSV(file_name, lista)
 
 
-def download_raw_content(url, content, csv):
+def download_raw_content(url, content):
     lista = []
     date = extract_date(content)
     lista.append(str(date) + ";" + url + ";\n\n")
@@ -118,16 +94,10 @@ def download_raw_content(url, content, csv):
 
     for item in re.split('\W\w\W\w', content):
 
-        if csv:
-            lista.append(str(item) + ";\n")
-        else:
-            lista.append(str(item) + "\n")
+        lista.append(str(item) + ";\n")
 
-    if csv:
-        file_name = url.split("/")[-1]
-        file_name = "csv/leakbuster_" + file_name.split(".")[0]
-        save_results.saveContentCSV(file_name, lista)
-    else:
-        file_name = url.split("/")[-1]
-        file_name = "downloads/leakbuster_" + file_name.split(".")[0]
-        save_results.saveContent(file_name, lista)
+    file_name = url.split("/")[-1]
+    file_name = "results/csv/leakbuster_" + file_name.split(".")[0]
+    save_results.saveContentCSV(file_name, lista)
+
+
