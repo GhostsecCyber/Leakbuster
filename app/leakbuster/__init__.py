@@ -3,6 +3,9 @@ from flask_migrate import Migrate
 from flask_sqlalchemy import SQLAlchemy
 from app.leakbuster.utils import config_APP, register_error_handlers
 from flasgger import Swagger
+from dotenv import load_dotenv
+
+load_dotenv()
 
 app = Flask(__name__)
 config_APP(app)

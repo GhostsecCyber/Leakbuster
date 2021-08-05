@@ -37,14 +37,14 @@ def upgrade():
     sa.Column('callback', sa.String(length=100), nullable=False),
     sa.Column('company', sa.String(length=300), nullable=False),
     sa.Column('cdomain', sa.String(length=300), nullable=False),
-    sa.Column('sites', sa.String(length=300), nullable=False),
+    sa.Column('site', sa.String(length=300), nullable=False),
     sa.PrimaryKeyConstraint('id'),
     sa.UniqueConstraint('callback'),
     sa.UniqueConstraint('cdomain'),
     sa.UniqueConstraint('email'),
     sa.UniqueConstraint('name'),
     sa.UniqueConstraint('phone'),
-    sa.UniqueConstraint('sites')
+    sa.UniqueConstraint('site')
     )
     op.create_table('leakbuster_leakCPFCNPJ',
     sa.Column('id', sa.String(length=32), nullable=False),
