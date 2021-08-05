@@ -42,7 +42,7 @@ class User:
                 email=request.json['email'],
                 company=request.json['company'],
                 cdomain=request.json['cdomain'],
-                site=request.json['sites']
+                site=request.json['site']
             )
             user.hash_password(request.json['password'])
 
