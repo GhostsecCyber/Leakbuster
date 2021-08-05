@@ -22,7 +22,7 @@ def register_error_handlers(app):
 
 def config_APP(app):
 
-    AES_KEY = os.environ.get('F_KEY', get_random_string(16))
+    AES_KEY = os.environ.get('AES_KEY', get_random_string(16))
 
     if len(AES_KEY) != 16:
         print('Wrong AES_KEY, this key need to have 16 char length')

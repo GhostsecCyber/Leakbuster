@@ -1,6 +1,6 @@
 swagger: "2.0"
 info:
-  description: "powered by GhostSecCyber"
+  description: "developed by GhostSecCyber"
   version: "2.0"
   title: "Leakbuster API Docs"
   contact:
@@ -8,138 +8,14 @@ info:
 basePath: "/api/v2"
 
 tags:
-- name: "user"
+- name: "User"
   description: "Users endpoints handlers"
-- name: "groups"
-  description: "Groups endpoints handlers"
-- name: "points"
-  description: "Points endpoints handlers"
-- name: "MFAO"
-  description: "MFAO endpoints handlers"
 
 paths:
-  /points/:
-    get:
-      tags:
-        - "points"
-      summary: "Return your point statement"
-      description: ""
-      operationId: "getStatement"
-      consumes:
-        - "application/json"
-      produces:
-        - "application/json"
-      responses:
-        "401":
-          description: "Unauthorized Access"
-        "500":
-          description: "Message: Sorry, something went wrong on our side"
-      security:
-        - basicAuth: []
-
-  /points/add/{UserId}:
-    post:
-      tags:
-        - "points"
-      summary: "Add points"
-      description: "[admin] Add points to any User"
-      operationId: "AddPoints"
-      consumes:
-        - "application/json"
-      produces:
-        - "application/json"
-      parameters:
-        - name: "UserId"
-          in: "path"
-          description: "User id that need to be defined in request"
-          required: true
-          type: "integer"
-          format: "int64"
-        - name: "Body"
-          in: "body"
-          description: "Points parameters that need to be defined in body request"
-          required: true
-          schema:
-            $ref: "#/definitions/Point"
-      responses:
-        "400":
-          description: "Message: Bad request message"
-        "401":
-          description: "Unauthorized Access"
-        "404":
-          description: "User not found"
-        "500":
-          description: "Message: Sorry, something went wrong on our side"
-  /points/remove/{UserId}:
-    post:
-      tags:
-        - "points"
-      summary: "Remove points"
-      description: "[admin] Remove points from any user"
-      operationId: "RemovePoints"
-      consumes:
-        - "application/json"
-      produces:
-        - "application/json"
-      parameters:
-        - name: "UserId"
-          in: "path"
-          description: "User id that need to be defined in request"
-          required: true
-          type: "integer"
-          format: "int64"
-        - name: "Body"
-          in: "body"
-          description: "Points parameters that need to be defined in body request"
-          required: true
-          schema:
-            $ref: "#/definitions/Point"
-      responses:
-        "400":
-          description: "Message: Bad request message"
-        "401":
-          description: "Unauthorized Access"
-        "404":
-          description: "User not found"
-        "500":
-          description: "Message: Sorry, something went wrong on our side"
-  /points/transfer/{UserId}:
-    post:
-      tags:
-        - "points"
-      summary: "Transfer points"
-      description: "Transfer your points to another user, like TED transactions"
-      operationId: "RemovePoints"
-      consumes:
-        - "application/json"
-      produces:
-        - "application/json"
-      parameters:
-        - name: "UserId"
-          in: "path"
-          description: "User id that will receive your points"
-          required: true
-          type: "integer"
-          format: "int64"
-        - name: "Body"
-          in: "body"
-          description: "Points parameters that need to be defined in body request"
-          required: true
-          schema:
-            $ref: "#/definitions/Point"
-      responses:
-        "400":
-          description: "Message: Bad request message"
-        "401":
-          description: "Unauthorized Access"
-        "404":
-          description: "User not found"
-        "500":
-          description: "Message: Sorry, something went wrong on our side"
   /user/:
     get:
       tags:
-      - "user"
+      - "User"
       summary: "Retrieve all users"
       description: "[admin] Return data from all users"
       operationId: "viewUser"
@@ -148,13 +24,15 @@ paths:
       produces:
       - "application/json"
       responses:
+        "200":
+          description: "Success"
         "401":
           description: "Unauthorized Access"
         "500":
           description: "Message: Sorry, something went wrong on our side"
     post:
       tags:
-      - "user"
+      - "User"
       summary: "Create new user"
       description: "[admin] Create a new user on the app"
       operationId: "addUser"
@@ -170,6 +48,8 @@ paths:
         schema:
           $ref: "#/definitions/User"
       responses:
+        "200":
+          description: "Success"
         "400":
           description: "Message: Bad request message"
         "401":
@@ -181,7 +61,7 @@ paths:
   /user/{UserId}:
     get:
       tags:
-      - "user"
+      - "User"
       summary: "View Unique user"
       description: "Return data from your user, admin can access other users data"
       operationId: "getUser"
@@ -196,6 +76,8 @@ paths:
         required: true
         type: "string"
       responses:
+        "200":
+          description: "Success"
         "400":
           description: "Message: Bad request message"
         "401":
@@ -206,7 +88,7 @@ paths:
           description: "Message: Sorry, something went wrong on our side"
     put:
       tags:
-      - "user"
+      - "User"
       summary: "Update an existing user"
       description: "Update user information"
       operationId: "updateUser"
@@ -219,8 +101,7 @@ paths:
         in: "path"
         description: "User id that need to be defined in request"
         required: true
-        type: "integer"
-        format: "int64"
+        type: "string"
       - in: "body"
         name: "Body"
         description: "User parameters that need to be defined in body request"
@@ -228,6 +109,8 @@ paths:
         schema:
           $ref: "#/definitions/User"
       responses:
+        "200":
+          description: "Success"
         "400":
           description: "Message: Bad request message"
         "401":
@@ -238,7 +121,7 @@ paths:
           description: "Message: Sorry, something went wrong on our side"
     delete:
       tags:
-      - "user"
+      - "User"
       summary: "Delete an existing user"
       description: ""
       operationId: "deleteUser"
@@ -251,199 +134,16 @@ paths:
         in: "path"
         description: "User id that need to be defined in request"
         required: true
-        type: "integer"
-        format: "int64"
+        type: "string"
       responses:
+        "200":
+          description: "Success"
         "400":
           description: "Message: Bad request message"
         "401":
           description: "Unauthorized Access"
         "404":
           description: "User not found"
-        "500":
-          description: "Message: Sorry, something went wrong on our side"
-  /groups/:
-    get:
-      tags:
-      - "groups"
-      summary: "Retrieve all groups"
-      description: "[admin]"
-      operationId: "viewGroup"
-      consumes:
-      - "application/json"
-      produces:
-      - "application/json"
-      responses:
-        "401":
-          description: "Unauthorized Access"
-        "500":
-          description: "Message: Sorry, something went wrong on our side"
-    post:
-      tags:
-      - "groups"
-      summary: "Create new group"
-      description: "[admin]"
-      operationId: "addGroup"
-      consumes:
-      - "application/json"
-      produces:
-      - "application/json"
-      parameters:
-      - in: "body"
-        name: "body"
-        description: "Group parameters that need to be defined in body request"
-        required: true
-        schema:
-          $ref: "#/definitions/Group"
-      responses:
-        "400":
-          description: "Message: Bad request message"
-        "401":
-          description: "Unauthorized Access"
-        "404":
-          description: "Group not found"
-        "500":
-          description: "Message: Sorry, something went wrong on our side"
-  /groups/{GroupId}:
-    get:
-      tags:
-      - "groups"
-      summary: "View Unique group"
-      description: "[admin]"
-      operationId: "getGroup"
-      consumes:
-      - "application/json"
-      produces:
-      - "application/json"
-      parameters:
-      - name: "GroupId"
-        in: "path"
-        description: "Group id that need to be defined in request"
-        required: true
-        type: "integer"
-        format: "int64"
-      responses:
-        "401":
-          description: "Unauthorized Access"
-        "404":
-          description: "Group not found"
-        "500":
-          description: "Message: Sorry, something went wrong on our side"
-    put:
-      tags:
-      - "groups"
-      summary: "Update an existing group"
-      description: "[admin]"
-      operationId: "updateGroup"
-      consumes:
-      - "application/json"
-      produces:
-      - "application/json"
-      parameters:
-      - name: "GroupId"
-        in: "path"
-        description: "Group id that need to be defined in request"
-        required: true
-        type: "integer"
-        format: "int64"
-      - in: "body"
-        name: "Body"
-        description: "Group parameters that need to be defined in body request"
-        required: true
-        schema:
-          $ref: "#/definitions/Group"
-      responses:
-        "400":
-          description: "Message: Bad request message"
-        "401":
-          description: "Unauthorized Access"
-        "404":
-          description: "Group not found"
-        "500":
-          description: "Message: Sorry, something went wrong on our side"
-    delete:
-      tags:
-      - "groups"
-      summary: "Delete an existing group"
-      description: "[admin]"
-      operationId: "deleteGroup"
-      consumes:
-      - "application/json"
-      produces:
-      - "application/json"
-      parameters:
-      - name: "GroupId"
-        in: "path"
-        description: "Group id that need to be defined in request"
-        required: true
-        type: "integer"
-        format: "int64"
-      responses:
-        "400":
-          description: "Message: Bad request message"
-        "401":
-          description: "Unauthorized Access"
-        "404":
-          description: "Group not found"
-        "500":
-          description: "Message: Sorry, something went wrong on our side"
-  /mfao/:
-    get:
-      tags:
-        - "MFAO"
-      summary: "View MFAO Configuration"
-      description: "[admin]"
-      operationId: "getMFAOConfigs"
-      consumes:
-        - "application/json"
-      produces:
-        - "application/json"
-      responses:
-        "400":
-          description: "Message: Bad request message"
-        "401":
-          description: "Unauthorized Access"
-        "500":
-          description: "Message: Sorry, something went wrong on our side"
-    post:
-      tags:
-        - "MFAO"
-      summary: "Create or Update an MFAO configuration"
-      description: "[admin]"
-      operationId: "create-updateMFAOConfigs"
-      consumes:
-        - "application/json"
-      produces:
-        - "application/json"
-      parameters:
-        - in: "body"
-          name: "Body"
-          description: "MFAO parameters that need to be defined in body request"
-          required: true
-          schema:
-            $ref: "#/definitions/MFAO"
-      responses:
-        "400":
-          description: "Message: Bad request message"
-        "401":
-          description: "Unauthorized Access"
-        "500":
-          description: "Message: Sorry, something went wrong on our side"
-    delete:
-      tags:
-        - "MFAO"
-      summary: "Delete an existing MFAO configuration"
-      description: "[admin]"
-      operationId: "deleteMFAOConfigs"
-      consumes:
-        - "application/json"
-      produces:
-        - "application/json"
-      responses:
-        "400":
-          description: "Message: Bad request message"
-        "401":
-          description: "Unauthorized Access"
         "500":
           description: "Message: Sorry, something went wrong on our side"
 
@@ -453,54 +153,31 @@ definitions:
     required:
     - "name"
     - "password"
-    - "group"
-    - "admin"
+    - "roles"
     - "phone"
     - "email"
+    - "callback"
+    - "company"
+    - "cdomain"
+    - "site"
     properties:
       name:
         type: "string"
       password:
         type: "string"
+      roles:
+        type: "string"
       phone:
         type: "string"
       email:
         type: "string"
-      admin:
-        type: "boolean"
-      group:
-        type: "array"
-        items:
-          type: "integer"
-  Group:
-    type: "object"
-    required:
-    - "name"
-    properties:
-      name:
+      callback:
         type: "string"
-  Point:
-    type: "object"
-    required:
-      - "points"
-    properties:
-      points:
-        type: "integer"
-  MFAO:
-    type: "object"
-    required:
-      - "url"
-      - "client_id"
-      - "access_key"
-      - "policy_id"
-    properties:
-      url:
+      company:
         type: "string"
-      client_id:
+      cdomain:
         type: "string"
-      access_key:
-        type: "string"
-      policy_id:
+      site:
         type: "string"
 
 securityDefinitions:

@@ -32,27 +32,30 @@ class User:
     def create_user(self, request):
         ValidationData(request.json)
 
-        user = UserMD(
-            name=request.json['name'],
-            roles=request.json['roles'],
-            callback=request.json['callback'],
-            phone=request.json['phone'],
-            email=request.json['email'],
-            company=request.json['company'],
-            cdomain=request.json['cdomain'],
-            sites=request.json['sites']
-        )
-        user.hash_password(request.json['password'])
         try:
+
+            user = UserMD(
+                name=request.json['name'],
+                roles=request.json['roles'],
+                callback=request.json['callback'],
+                phone=request.json['phone'],
+                email=request.json['email'],
+                company=request.json['company'],
+                cdomain=request.json['cdomain'],
+                site=request.json['sites']
+            )
+            user.hash_password(request.json['password'])
+
             db.session.add(user)
             db.session.commit()
         except sqlalchemy.exc.IntegrityError:
             abort(500)
-
+        except KeyError:
+            abort(400, "Missing roles parameter")
         return {
             "Status": "Success",
             "Message": "User registered successfully!",
-            "data": user.serialized()
+            "data": user.serialized
         }
 
     def get_users(self, request):
@@ -65,11 +68,38 @@ class User:
         user = UserMD.query.get_or_404(id, description="User ID not found")
         return user.serialized
 
-    def delete_user(self, request):
-        ...
+    def delete_user(self, id):
+        user = UserMD.query.get_or_404(id, description="User ID not found")
+        db.session.delete(user)
+        db.session.commit()
+        return {
+            "Status": "Success",
+            "Message": "User Successfully deleted"
+        }
 
-    def update_user(self, request):
-        ...
+    def update_user(self, request, id):
+        ValidationData(request.json)
+
+        user = UserMD.query.get_or_404(id, description="User ID not found")
+        user.name = request.json['name']
+        user.phone = request.json['phone']
+        user.email = request.json['email']
+        user.callback = request.json['callback']
+        user.company = request.json['company']
+        user.cdomain = request.json['cdomain']
+        user.site = request.json['site']
+        user.hash_password(request.json['password'])
+
+        try:
+            db.session.add(user)
+            db.session.commit()
+        except sqlalchemy.exc.IntegrityError:
+            abort(500, "Something went wrong, verify user data and try again")
+        return {
+            "Status": "Success",
+            "Message": "User updated successfully",
+            "data": user.serialized
+        }
 
     def get_user_for_auth(self, username):
 
@@ -84,18 +114,18 @@ class User:
 
     def create_admin(self):
         try:
-            if not UserMD.query.filter_by(name=os.environ.get('ADMIN_NAME', 'Raven')).first():
+            if not UserMD.query.filter_by(name=os.environ.get('ADMIN_USER', 'buster')).first():
                 user = UserMD(
-                    name=os.environ.get('ADMIN_NAME', 'Raven'),
+                    name=os.environ.get('ADMIN_USER', 'buster'),
                     roles='admin',
                     callback='callback',
                     phone='11999999999',
                     email='email@admin.com.br',
                     company='GhostSecCyber',
                     cdomain='@GhostSecCyber.com.br',
-                    sites='https://GhostSecCyber.com.br'
+                    site='https://GhostSecCyber.com.br'
                 )
-                user.hash_password(os.environ.get('ADMIN_PASS', 'raven'))
+                user.hash_password(os.environ.get('ADMIN_PASS', 'buster'))
                 db.session.add(user)
                 db.session.commit()
                 return

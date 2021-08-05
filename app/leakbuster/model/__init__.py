@@ -16,7 +16,7 @@ class UserMD(db.Model):
     callback = db.Column(db.String(100), unique=True, nullable=False)
     company = db.Column(db.String(300), nullable=False)
     cdomain = db.Column(db.String(300), unique=True, nullable=False)
-    sites = db.Column(db.String(300), unique=True, nullable=False)
+    site = db.Column(db.String(300), unique=True, nullable=False)
 
     @property
     def serialized(self):
@@ -29,7 +29,7 @@ class UserMD(db.Model):
             'email': self.email,
             'company': self.company,
             'cdomain': self.cdomain,
-            'sites': self.sites
+            'site': self.site
         }
 
     def hash_password(self, password):
