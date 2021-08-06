@@ -1,11 +1,11 @@
-from marshmallow import Schema, ValidationError, fields
+from marshmallow import Schema, ValidationError, fields, validate
 from flask import abort
 
 
 class UserSchema(Schema):
     name = fields.String(required=True)
     password = fields.String(required=True)
-    roles = fields.String(required=False)
+    roles = fields.String(validate=validate.OneOf(['admin', 'user']))
     phone = fields.String(required=True)
     email = fields.Email(required=True)
     callback = fields.Url(required=True)
@@ -21,8 +21,6 @@ class ValidationData:
             schema = UserSchema()
             schema.load(json_data)
 
-            if json_data['roles'] not in ['admin', 'user']:
-                raise ValidationError('Invalid role provided')
             return
         except KeyError:
             return
