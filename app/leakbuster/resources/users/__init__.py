@@ -35,6 +35,7 @@ class User:
         try:
 
             user = UserMD(
+                id=uuid.uuid4().hex,
                 name=request.json['name'],
                 roles=request.json['roles'],
                 callback=request.json['callback'],
@@ -48,7 +49,7 @@ class User:
 
             db.session.add(user)
             db.session.commit()
-        except sqlalchemy.exc.IntegrityError:
+        except sqlalchemy.exc.IntegrityError as e:
             abort(500)
         except KeyError:
             abort(400, "Missing roles parameter")
@@ -116,6 +117,7 @@ class User:
         try:
             if not UserMD.query.filter_by(name=os.environ.get('ADMIN_USER', 'buster')).first():
                 user = UserMD(
+                    id=uuid.uuid4().hex,
                     name=os.environ.get('ADMIN_USER', 'buster'),
                     roles='admin',
                     callback='callback',
@@ -128,7 +130,7 @@ class User:
                 user.hash_password(os.environ.get('ADMIN_PASS', 'buster'))
                 db.session.add(user)
                 db.session.commit()
-                return
+                return user
         except sqlalchemy.exc.OperationalError:
             return
         except sqlalchemy.exc.ProgrammingError:

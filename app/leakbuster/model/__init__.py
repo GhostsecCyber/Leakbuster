@@ -7,7 +7,7 @@ class UserMD(db.Model):
 
     __tablename__ = 'leakbuster_user'
 
-    id = db.Column(db.String(32), primary_key=True, default=uuid.uuid4().hex)
+    id = db.Column(db.String(32), primary_key=True)
     name = db.Column(db.String(50), unique=True, nullable=False)
     password = db.Column(db.String(128), nullable=False)
     roles = db.Column(db.String(5), nullable=False)
