@@ -12,7 +12,6 @@ def add_testing_update_user():
         id=uuid.uuid4().hex,
         name='test',
         roles='user',
-        callback='http://test.com',
         phone='test',
         email='test@mail.com',
         company='test',

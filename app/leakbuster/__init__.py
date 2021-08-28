@@ -24,5 +24,6 @@ def create_app():
 
     register_error_handlers(app)
     User().create_admin()
+    User().create_script_user()
 
     return app

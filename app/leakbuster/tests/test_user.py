@@ -10,7 +10,6 @@ class UserResourceTest(ProjectTest):
     def test_new_user(self):
         with app.test_client() as client:
             payload = {
-                "callback": "http://string.com",
                 "cdomain": "@string.com",
                 "company": "string",
                 "email": "string@mail.com",
@@ -31,10 +30,18 @@ class UserResourceTest(ProjectTest):
             self.assertEqual(response.status_code, 200)
             self.assertTrue(isinstance(response.json['data'], list))
 
+    def test_get_user(self):
+        user_id = add_testing_update_user()
+
+        with app.test_client() as client:
+            response = client.get(f'/api/v2/user/{user_id}', headers=default_header())
+            self.assertEqual(response.status_code, 200)
+            self.assertTrue(response.json['Status'], "Success")
+            self.assertTrue(isinstance(response.json['data'], dict))
+
     def test_update_user(self):
         user_id = add_testing_update_user()
         payload = {
-            "callback": "http://string.com",
             "cdomain": "@string.com",
             "company": "string",
             "email": "string@mail.com",
@@ -81,7 +88,6 @@ class UserErrorsTest(ProjectTest):
 
     def test_error_404_wrong_user_id(self):
         payload = {
-            "callback": "http://string.com",
             "cdomain": "@string.com",
             "company": "string",
             "email": "string@mail.com",
