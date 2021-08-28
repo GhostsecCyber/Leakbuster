@@ -10,6 +10,8 @@ basePath: "/api/v2"
 tags:
 - name: "User"
   description: "Users endpoints handlers"
+- name: "Leaks Source"
+  description: "Leaks sources endpoints handlers"
 
 paths:
   /user/:
@@ -54,8 +56,6 @@ paths:
           description: "Message: Bad request message"
         "401":
           description: "Unauthorized Access"
-        "404":
-          description: "User not found"
         "500":
           description: "Message: Sorry, something went wrong on our side"
   /user/{UserId}:
@@ -146,6 +146,138 @@ paths:
           description: "User not found"
         "500":
           description: "Message: Sorry, something went wrong on our side"
+  /leak/source:
+    get:
+      tags:
+        - "Leaks Source"
+      summary: "Retrieve leak sources"
+      description: "[admin, script] Return data from all leak sources"
+      operationId: "viewLSource"
+      consumes:
+        - "application/json"
+      produces:
+        - "application/json"
+      responses:
+        "200":
+          description: "Success"
+        "401":
+          description: "Unauthorized Access"
+        "500":
+          description: "Message: Sorry, something went wrong on our side"
+    post:
+      tags:
+        - "Leaks Source"
+      summary: "Register a new leak source"
+      description: "[admin, script] Register a new Leak on the app"
+      operationId: "addLSource"
+      consumes:
+        - "application/json"
+      produces:
+        - "application/json"
+      parameters:
+        - in: "body"
+          name: "body"
+          description: "Leak Source parameters that need to be defined in body request"
+          required: true
+          schema:
+            $ref: "#/definitions/LSource"
+      responses:
+        "200":
+          description: "Success"
+        "400":
+          description: "Message: Bad request message"
+        "401":
+          description: "Unauthorized Access"
+        "500":
+          description: "Message: Sorry, something went wrong on our side"
+  /leak/source/{SourceId}:
+    get:
+      tags:
+        - "Leaks Source"
+      summary: "View Unique leak source"
+      description: "[admin, script] Return data from requested leak source"
+      operationId: "getLSource"
+      consumes:
+        - "application/json"
+      produces:
+        - "application/json"
+      parameters:
+        - name: "SourceId"
+          in: "path"
+          description: "Leak source id that need to be defined in request"
+          required: true
+          type: "string"
+      responses:
+        "200":
+          description: "Success"
+        "400":
+          description: "Message: Bad request message"
+        "401":
+          description: "Unauthorized Access"
+        "404":
+          description: "Leak source not found"
+        "500":
+          description: "Message: Sorry, something went wrong on our side"
+    put:
+      tags:
+        - "Leaks Source"
+      summary: "Update an existing leak source"
+      description: "[admin, script] Update leak source information"
+      operationId: "updateLSource"
+      consumes:
+        - "application/json"
+      produces:
+        - "application/json"
+      parameters:
+        - name: "SourceId"
+          in: "path"
+          description: "Leak source id that need to be defined in request"
+          required: true
+          type: "string"
+        - in: "body"
+          name: "Body"
+          description: "Leak source parameters that need to be defined in body request"
+          required: true
+          schema:
+            $ref: "#/definitions/LSource"
+      responses:
+        "200":
+          description: "Success"
+        "400":
+          description: "Message: Bad request message"
+        "401":
+          description: "Unauthorized Access"
+        "404":
+          description: "Leak source not found"
+        "500":
+          description: "Message: Sorry, something went wrong on our side"
+    delete:
+      tags:
+        - "Leaks Source"
+      summary: "Delete an existing Leak"
+      description: "[admin, script]"
+      operationId: "deleteUser"
+      consumes:
+        - "application/json"
+      produces:
+        - "application/json"
+      parameters:
+        - name: "SourceId"
+          in: "path"
+          description: "Leak source id that need to be defined in request"
+          required: true
+          type: "string"
+      responses:
+        "200":
+          description: "Success"
+        "400":
+          description: "Message: Bad request message"
+        "401":
+          description: "Unauthorized Access"
+        "404":
+          description: "Leak source not found"
+        "500":
+          description: "Message: Sorry, something went wrong on our side"
 
 definitions:
   User:
@@ -156,7 +288,6 @@ definitions:
     - "roles"
     - "phone"
     - "email"
-    - "callback"
     - "company"
     - "cdomain"
     - "site"
@@ -171,13 +302,27 @@ definitions:
         type: "string"
       email:
         type: "string"
-      callback:
-        type: "string"
       company:
         type: "string"
       cdomain:
         type: "string"
       site:
+        type: "string"
+  LSource:
+    type: "object"
+    required:
+      - "url"
+      - "date"
+      - "description"
+      - "author"
+    properties:
+      url:
+        type: "string"
+      date:
+        type: "string"
+      description:
+        type: "string"
+      author:
         type: "string"
 
 securityDefinitions:
