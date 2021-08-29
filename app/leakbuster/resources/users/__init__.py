@@ -16,7 +16,7 @@ def login_required(roles=[]):
                 auth = request.authorization
                 user = User().get_user_for_auth(auth.username)
                 if auth and user.verify_password(auth.password) and user.roles in roles:
-                    if user.roles != 'admin':
+                    if user.roles != 'admin' and user.roles != 'script':
                         try:
                             is_user_or_is_admin(user, kwargs['id'])
                         except KeyError:

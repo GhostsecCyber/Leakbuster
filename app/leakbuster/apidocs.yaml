@@ -180,7 +180,7 @@ paths:
           description: "Leak Source parameters that need to be defined in body request"
           required: true
           schema:
-            $ref: "#/definitions/LSource"
+            $ref: "#/definitions/Leak Source"
       responses:
         "200":
           description: "Success"
@@ -239,7 +239,7 @@ paths:
           description: "Leak source parameters that need to be defined in body request"
           required: true
           schema:
-            $ref: "#/definitions/LSource"
+            $ref: "#/definitions/Leak Source"
       responses:
         "200":
           description: "Success"
@@ -308,7 +308,7 @@ definitions:
         type: "string"
       site:
         type: "string"
-  LSource:
+  Leak Source:
     type: "object"
     required:
       - "url"

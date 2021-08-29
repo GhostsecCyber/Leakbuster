@@ -1,4 +1,4 @@
-from app.leakbuster.resources.api import api, user, login_required
+from app.leakbuster.resources.endpoints import api, user, login_required
 from flask import request, jsonify
 
 
