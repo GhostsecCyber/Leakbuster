@@ -8,7 +8,6 @@ class UserSchema(Schema):
     roles = fields.String(validate=validate.OneOf(['admin', 'user']))
     phone = fields.String(required=True)
     email = fields.Email(required=True)
-    callback = fields.Url(required=True)
     site = fields.Url(required=True)
     company = fields.String(required=True)
     cdomain = fields.String(required=True)

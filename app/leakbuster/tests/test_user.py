@@ -10,7 +10,6 @@ class UserResourceTest(ProjectTest):
     def test_new_user(self):
         with app.test_client() as client:
             payload = {
-                "callback": "http://string.com",
                 "cdomain": "@string.com",
                 "company": "string",
                 "email": "string@mail.com",
@@ -31,10 +30,18 @@ class UserResourceTest(ProjectTest):
             self.assertEqual(response.status_code, 200)
             self.assertTrue(isinstance(response.json['data'], list))
 
+    def test_get_user(self):
+        user_id = add_testing_update_user()
+
+        with app.test_client() as client:
+            response = client.get(f'/api/v2/user/{user_id}', headers=default_header())
+            self.assertEqual(response.status_code, 200)
+            self.assertTrue(response.json['Status'], "Success")
+            self.assertTrue(isinstance(response.json['data'], dict))
+
     def test_update_user(self):
         user_id = add_testing_update_user()
         payload = {
-            "callback": "http://string.com",
             "cdomain": "@string.com",
             "company": "string",
             "email": "string@mail.com",
@@ -63,11 +70,18 @@ class UserErrorsTest(ProjectTest):
         add_testing_user()
 
     def test_Unauthorized_Access(self):
+        add_testing_update_user()
+        response = []
         with app.test_client() as client:
-            response = client.get('/api/v2/user/', headers=wrong_header())
-            self.assertEqual(response.status_code, 401)
+            response.append(client.get('/api/v2/user/', headers=wrong_header()))
+            response.append(client.get('/api/v2/user/123456', headers=default_user_header()))
+
+            for resp in response:
+                self.assertEqual(resp.status_code, 401)
 
     def test_error_400_missing_parameters(self):
+        user_id = add_testing_update_user()
+        response = []
         with app.test_client() as client:
             payload = {
                 "name": "updated_user",
@@ -75,13 +89,14 @@ class UserErrorsTest(ProjectTest):
                 "admin": True,
                 "group": []
             }
-            response = client.post('/api/v2/user/', data=json.dumps(payload), headers=default_header())
-            self.assertEqual(response.status_code, 400)
-            self.assertTrue(response.json['Message'])
+            response.append(client.post('/api/v2/user/', headers=default_header()))
+            response.append(client.put(f'/api/v2/user/{user_id}', headers=default_user_header()))
+
+            for resp in response:
+                self.assertEqual(resp.status_code, 400)
 
     def test_error_404_wrong_user_id(self):
         payload = {
-            "callback": "http://string.com",
             "cdomain": "@string.com",
             "company": "string",
             "email": "string@mail.com",
@@ -90,7 +105,11 @@ class UserErrorsTest(ProjectTest):
             "phone": "string",
             "site": "http://string.com"
         }
+        response = []
         with app.test_client() as client:
-            response = client.put('/api/v2/user/50', data=json.dumps(payload), headers=default_header())
-            self.assertEqual(response.status_code, 404)
-            self.assertTrue(response.json['Message'], "User ID not found")
+            response.append(client.put('/api/v2/user/50', data=json.dumps(payload), headers=default_header()))
+            response.append(client.delete('/api/v2/user/50', headers=default_header()))
+
+            for resp in response:
+                self.assertEqual(resp.status_code, 404)
+                self.assertTrue(resp.json['Message'], "User ID not found")

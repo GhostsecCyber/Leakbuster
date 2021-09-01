@@ -16,7 +16,7 @@ def login_required(roles=[]):
                 auth = request.authorization
                 user = User().get_user_for_auth(auth.username)
                 if auth and user.verify_password(auth.password) and user.roles in roles:
-                    if user.roles != 'admin':
+                    if user.roles != 'admin' and user.roles != 'script':
                         try:
                             is_user_or_is_admin(user, kwargs['id'])
                         except KeyError:
@@ -38,7 +38,6 @@ class User:
                 id=uuid.uuid4().hex,
                 name=request.json['name'],
                 roles=request.json['roles'],
-                callback=request.json['callback'],
                 phone=request.json['phone'],
                 email=request.json['email'],
                 company=request.json['company'],
@@ -67,7 +66,7 @@ class User:
 
     def get_user(self, id):
         user = UserMD.query.get_or_404(id, description="User ID not found")
-        return user.serialized
+        return {'Status': 'Success', 'data': user.serialized}
 
     def delete_user(self, id):
         user = UserMD.query.get_or_404(id, description="User ID not found")
@@ -85,7 +84,6 @@ class User:
         user.name = request.json['name']
         user.phone = request.json['phone']
         user.email = request.json['email']
-        user.callback = request.json['callback']
         user.company = request.json['company']
         user.cdomain = request.json['cdomain']
         user.site = request.json['site']
@@ -115,19 +113,40 @@ class User:
 
     def create_admin(self):
         try:
-            if not UserMD.query.filter_by(name=os.environ.get('ADMIN_USER', 'buster')).first():
+            if not UserMD.query.filter_by(name=os.environ.get('ADMIN_USER', 'admin')).first():
                 user = UserMD(
                     id=uuid.uuid4().hex,
-                    name=os.environ.get('ADMIN_USER', 'buster'),
+                    name=os.environ.get('ADMIN_USER', 'admin'),
                     roles='admin',
-                    callback='callback',
                     phone='11999999999',
                     email='email@admin.com.br',
                     company='GhostSecCyber',
                     cdomain='@GhostSecCyber.com.br',
                     site='https://GhostSecCyber.com.br'
                 )
-                user.hash_password(os.environ.get('ADMIN_PASS', 'buster'))
+                user.hash_password(os.environ.get('ADMIN_PASS', 'admin'))
+                db.session.add(user)
+                db.session.commit()
+                return user
+        except sqlalchemy.exc.OperationalError:
+            return
+        except sqlalchemy.exc.ProgrammingError:
+            return
+
+    def create_script_user(self):
+        try:
+            if not UserMD.query.filter_by(roles='script').first():
+                user = UserMD(
+                    id=uuid.uuid4().hex,
+                    name=os.environ.get('SCRIPT_USER', 'script'),
+                    roles='script',
+                    phone='99999999999',
+                    email='leakbuster_script@leakbuster_script.com.br',
+                    company='leakbuster_script',
+                    cdomain='@leakbuster_script.com.br',
+                    site='https://leakbuster_script.com.br'
+                )
+                user.hash_password(os.environ.get('SCRIPT_PASS', 'scriptpass'))
                 db.session.add(user)
                 db.session.commit()
                 return user
