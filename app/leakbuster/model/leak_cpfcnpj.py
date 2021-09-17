@@ -2,11 +2,10 @@ from app.leakbuster import db
 from app.leakbuster.model import *
 
 
-class LeakCPFCNPJ(db.Model):
+class LeakCPFCNPJ(db.Model, BaseModel):
 
     __tablename__ = 'leakCPFCNPJ'
 
-    id = db.Column(db.String(32), primary_key=True)
     CPF_CNPJ = db.Column(db.String(100), nullable=False)
 
     leak_id = db.Column(db.String(32), db.ForeignKey('leakSource.id'))
@@ -16,5 +15,7 @@ class LeakCPFCNPJ(db.Model):
         return {
             'id': self.id,
             'cpf_cnpj': self.warning_type,
-            'leak_id': self.leak_id
+            'leak_id': self.leak_id,
+            'created': self.created,
+            'updated': self.updated
         }

@@ -2,10 +2,8 @@ from app.leakbuster import db
 from flask import abort, request, g
 from functools import wraps
 from app.leakbuster.model import UserMD
-from app.leakbuster.schemas.user import ValidationData
 from app.leakbuster.utils import is_user_or_is_admin
 import sqlalchemy
-import uuid
 import os
 
 
@@ -30,12 +28,10 @@ def login_required(roles=[]):
 class User:
 
     def create_user(self, request):
-        ValidationData(request.json)
 
         try:
 
             user = UserMD(
-                id=uuid.uuid4().hex,
                 name=request.json['name'],
                 roles=request.json['roles'],
                 phone=request.json['phone'],
@@ -78,7 +74,6 @@ class User:
         }
 
     def update_user(self, request, id):
-        ValidationData(request.json)
 
         user = UserMD.query.get_or_404(id, description="User ID not found")
         user.name = request.json['name']
@@ -115,7 +110,6 @@ class User:
         try:
             if not UserMD.query.filter_by(name=os.environ.get('ADMIN_USER', 'admin')).first():
                 user = UserMD(
-                    id=uuid.uuid4().hex,
                     name=os.environ.get('ADMIN_USER', 'admin'),
                     roles='admin',
                     phone='11999999999',
@@ -124,7 +118,7 @@ class User:
                     cdomain='@GhostSecCyber.com.br',
                     site='https://GhostSecCyber.com.br'
                 )
-                user.hash_password(os.environ.get('ADMIN_PASS', 'admin'))
+                user.hash_password(os.environ.get('ADMIN_PASS'))
                 db.session.add(user)
                 db.session.commit()
                 return user
@@ -137,7 +131,6 @@ class User:
         try:
             if not UserMD.query.filter_by(roles='script').first():
                 user = UserMD(
-                    id=uuid.uuid4().hex,
                     name=os.environ.get('SCRIPT_USER', 'script'),
                     roles='script',
                     phone='99999999999',
@@ -146,7 +139,7 @@ class User:
                     cdomain='@leakbuster_script.com.br',
                     site='https://leakbuster_script.com.br'
                 )
-                user.hash_password(os.environ.get('SCRIPT_PASS', 'scriptpass'))
+                user.hash_password(os.environ.get('SCRIPT_PASS'))
                 db.session.add(user)
                 db.session.commit()
                 return user

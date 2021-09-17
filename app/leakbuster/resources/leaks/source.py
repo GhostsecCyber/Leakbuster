@@ -1,20 +1,16 @@
 from app.leakbuster import db
 from flask import abort
 from app.leakbuster.model import LeakSourceMD
-from app.leakbuster.schemas.leak import ValidationData
 import sqlalchemy
-import uuid
 
 
 class Source:
 
     def create_leak(self, request):
-        ValidationData(request.json)
 
         try:
 
             leak_source = LeakSourceMD(
-                id=uuid.uuid4().hex,
                 url=request.json['url'],
                 description=request.json['description'],
                 date=request.json['date'],
@@ -53,8 +49,6 @@ class Source:
         }
 
     def update_leak(self, request, id):
-
-        ValidationData(request.json)
 
         source = LeakSourceMD.query.get_or_404(id, description="Leak Source ID not found")
         source.url = request.json['url']

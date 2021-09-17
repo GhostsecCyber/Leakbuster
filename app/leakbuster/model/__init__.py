@@ -1,3 +1,4 @@
+from app.leakbuster.model.baseModel import BaseModel
 from app.leakbuster.model.users import *
 from app.leakbuster.model.leak_source import *
 from app.leakbuster.model.leak_general import *
