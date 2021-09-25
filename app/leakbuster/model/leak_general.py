@@ -2,11 +2,10 @@ from app.leakbuster import db
 from app.leakbuster.model import *
 
 
-class LeakGeneralMD(db.Model):
+class LeakGeneralMD(db.Model, BaseModel):
 
     __tablename__ = 'leakGeneral'
 
-    id = db.Column(db.String(32), primary_key=True)
     leaks = db.Column(db.String(100))
 
     leak_id = db.Column(db.String(32), db.ForeignKey('leakSource.id'))
@@ -16,5 +15,7 @@ class LeakGeneralMD(db.Model):
         return {
             'id': self.id,
             'leaks': self.leaks,
-            'leak_id': self.leak_id
+            'leak_id': self.leak_id,
+            'created': self.created,
+            'updated': self.updated
         }

@@ -3,11 +3,10 @@ from app.leakbuster.model import *
 from werkzeug.security import generate_password_hash, check_password_hash
 
 
-class UserMD(db.Model):
+class UserMD(db.Model, BaseModel):
 
     __tablename__ = 'user'
 
-    id = db.Column(db.String(32), primary_key=True)
     name = db.Column(db.String(50), unique=True, nullable=False)
     password = db.Column(db.String(128), nullable=False)
     roles = db.Column(db.String(6), nullable=False)
@@ -27,7 +26,9 @@ class UserMD(db.Model):
             'email': self.email,
             'company': self.company,
             'cdomain': self.cdomain,
-            'site': self.site
+            'site': self.site,
+            'created': self.created,
+            'updated': self.updated
         }
 
     def hash_password(self, password):

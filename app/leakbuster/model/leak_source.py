@@ -2,11 +2,10 @@ from app.leakbuster import db
 from app.leakbuster.model import *
 
 
-class LeakSourceMD(db.Model):
+class LeakSourceMD(db.Model, BaseModel):
 
     __tablename__ = 'leakSource'
 
-    id = db.Column(db.String(32), primary_key=True)
     url = db.Column(db.String(200), unique=True)
     date = db.Column(db.String(200))
     description = db.Column(db.String(400))
@@ -26,6 +25,8 @@ class LeakSourceMD(db.Model):
             'author': self.author,
             'general': self.general,
             'leak_emails': self.leak_emails,
-            'leak_password': self.leak_password
+            'leak_password': self.leak_password,
+            'created': self.created,
+            'updated': self.updated
 
         }
