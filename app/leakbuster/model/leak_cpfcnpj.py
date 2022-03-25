@@ -6,12 +6,13 @@ class LeakCPFCNPJ(db.Model, BaseModel):
 
     __tablename__ = 'leakCPFCNPJ'
 
-    CPF_CNPJ = db.Column(db.String(100), nullable=False)
+    CPF_CNPJ = db.Column(db.String(3072), nullable=False)
 
     leak_id = db.Column(db.String(32), db.ForeignKey('leakSource.id'))
 
     @property
     def serialized(self):
+        self.read()
         return {
             'id': self.id,
             'cpf_cnpj': self.warning_type,

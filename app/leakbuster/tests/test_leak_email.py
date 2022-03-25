@@ -2,104 +2,104 @@ from . import *
 import json
 
 
-class LeakSourceResourceTestWithAdminUser(ProjectTest):
+class LeakEmailResourceTestWithAdminUser(ProjectTest):
     def setUp(self):
         super().setUp()
         add_testing_user()
 
-    def test_new_leak(self):
+    def test_new_email_leak(self):
+        self.leakSourceID = add_testing_update_leak_source()
         with app.test_client() as client:
             payload = {
-                "author": "test",
-                "date": "test",
-                "description": "test",
-                "url": "https://test.com"
+                "email": "unit_test@test.com.br",
+                "leak_id": self.leakSourceID,
+                "leak_password": "test"
             }
-            response = client.post('/api/v2/leak/source/', data=json.dumps(payload), headers=default_header())
+            response = client.post('/api/v2/leak/email/', data=json.dumps(payload), headers=default_header())
             self.assertEqual(response.status_code, 200)
             self.assertEqual(response.json['Status'], "Success")
             self.assertTrue(isinstance(response.json['data'], dict))
 
     def test_get_all(self):
+        self.leakEmailID, self.leakSourceID = add_testing_update_leak_email()
         with app.test_client() as client:
-            response = client.get('/api/v2/leak/source/', headers=default_header())
+            response = client.get('/api/v2/leak/email/', headers=default_header())
             self.assertEqual(response.status_code, 200)
             self.assertTrue(isinstance(response.json['data'], list))
 
-    def test_get_leak_source(self):
-        leak_id = add_testing_update_leak_source()
-
+    def test_get_email_leak(self):
+        self.leakEmailID, self.leakSourceID = add_testing_update_leak_email()
         with app.test_client() as client:
-            response = client.get(f'/api/v2/leak/source/{leak_id}', headers=default_header())
+            response = client.get(f'/api/v2/leak/email/{self.leakEmailID}', headers=default_header())
             self.assertEqual(response.status_code, 200)
             self.assertTrue(response.json['Status'], "Success")
             self.assertTrue(isinstance(response.json['data'], dict))
 
-    def test_update_leak_source(self):
-        leak_id = add_testing_update_leak_source()
+    def test_update_email_leak(self):
+        self.leakEmailID, self.leakSourceID = add_testing_update_leak_email()
         payload = {
-            "author": "test",
-            "date": "test",
-            "description": "string",
-            "url": "https://test.com"
-        }
+                "email": "unit_test_updated@test.com.br",
+                "leak_id": self.leakSourceID,
+                "leak_password": "test"
+            }
         with app.test_client() as client:
-            response = client.put(f'/api/v2/leak/source/{leak_id}', data=json.dumps(payload), headers=default_header())
+            response = client.put(f'/api/v2/leak/email/{self.leakEmailID}', data=json.dumps(payload), headers=default_header())
             self.assertEqual(response.status_code, 200)
             self.assertTrue(response.json['Status'], "Success")
             self.assertTrue(isinstance(response.json['data'], dict))
 
-    def test_del_leak_source(self):
-        leak_id = add_testing_update_leak_source()
+    def test_del_email_leak(self):
+        self.leakEmailID, self.leakSourceID = add_testing_update_leak_email()
         with app.test_client() as client:
-            response = client.delete(f'/api/v2/leak/source/{leak_id}', headers=default_header())
+            response = client.delete(f'/api/v2/leak/email/{self.leakEmailID}', headers=default_header())
             self.assertEqual(response.status_code, 200)
             self.assertTrue(response.json['Status'], "Success")
 
 
-class LeakSourceResourceTestWithScriptUser(ProjectTest):
+class LeakEmailResourceTestWithScriptUser(ProjectTest):
     def setUp(self):
         super().setUp()
         add_testing_user()
 
-    def test_new_leak(self):
+    def test_new_email_leak(self):
+        self.leakSourceID = add_testing_update_leak_source()
         with app.test_client() as client:
             payload = {
-                "author": "test",
-                "date": "test",
-                "description": "test",
-                "url": "https://test.com"
+                "email": "unit_test@test.com.br",
+                "leak_id": self.leakSourceID,
+                "leak_password": "test"
             }
-            response = client.post('/api/v2/leak/source/', data=json.dumps(payload), headers=script_user_header())
+            response = client.post('/api/v2/leak/email/', data=json.dumps(payload), headers=script_user_header())
             self.assertEqual(response.status_code, 200)
             self.assertEqual(response.json['Status'], "Success")
             self.assertTrue(isinstance(response.json['data'], dict))
 
     def test_get_all(self):
+        self.leakEmailID, self.leakSourceID = add_testing_update_leak_email()
         with app.test_client() as client:
-            response = client.get('/api/v2/leak/source/', headers=script_user_header())
+            response = client.get('/api/v2/leak/email/', headers=script_user_header())
             self.assertEqual(response.status_code, 200)
             self.assertTrue(isinstance(response.json['data'], list))
 
-    def test_get_leak_source(self):
-        leak_id = add_testing_update_leak_source()
-
+    def test_get_email_leak(self):
+        self.leakEmailID, self.leakSourceID = add_testing_update_leak_email()
         with app.test_client() as client:
-            response = client.get(f'/api/v2/leak/source/{leak_id}', headers=script_user_header())
+            response = client.get(f'/api/v2/leak/email/{self.leakEmailID}', headers=script_user_header())
             self.assertEqual(response.status_code, 200)
             self.assertTrue(response.json['Status'], "Success")
             self.assertTrue(isinstance(response.json['data'], dict))
 
 
-class LeakSourceErrorsTest(ProjectTest):
+class LeakEmailErrorsTest(ProjectTest):
     def setUp(self):
         super().setUp()
         add_testing_user()
+        self.leakEmailID, self.leakSourceID = add_testing_update_leak_email()
 
     def test_Unauthorized_Access(self):
         add_testing_update_user()
-        endpoint_with_id = '/api/v2/leak/source/123456'
-        endpoint = '/api/v2/leak/source/'
+        endpoint_with_id = '/api/v2/leak/email/123456'
+        endpoint = '/api/v2/leak/email/'
 
         response = []
 
@@ -125,37 +125,35 @@ class LeakSourceErrorsTest(ProjectTest):
                 self.assertEqual(resp.status_code, 401)
 
     def test_error_400_missing_parameters(self):
-        leak_id = add_testing_update_leak_source()
 
         with app.test_client() as client:
             payload = {
-                "date": "test",
-                "url": "https://test.com"
+                "email": "unit_test@test.com.br",
+                "leak_password": "test"
             }
-            response = client.post('/api/v2/leak/source/', data=json.dumps(payload), headers=default_header())
+            response = client.post('/api/v2/leak/email/', data=json.dumps(payload), headers=default_header())
             self.assertEqual(response.status_code, 400)
             self.assertTrue(response.json['Message'])
 
-            response = client.put(f'/api/v2/leak/source/{leak_id}', data=json.dumps(payload), headers=default_header())
+            response = client.put(f'/api/v2/leak/email/{self.leakEmailID}', data=json.dumps(payload), headers=default_header())
             self.assertEqual(response.status_code, 400)
             self.assertTrue(response.json['Message'])
 
     def test_error_404_wrong_leak_source_id(self):
         payload = {
-            "author": "test",
-            "date": "test",
-            "description": "test",
-            "url": "https://test.com"
+            "email": "unit_test@test.com.br",
+            "leak_id": self.leakSourceID,
+            "leak_password": "test"
         }
         with app.test_client() as client:
-            response = client.put('/api/v2/leak/source/50', data=json.dumps(payload), headers=default_header())
+            response = client.put('/api/v2/leak/email/50', data=json.dumps(payload), headers=default_header())
             self.assertEqual(response.status_code, 404)
-            self.assertTrue(response.json['Message'], "Leak Source ID not found")
+            self.assertTrue(response.json['Message'], "Mail ID not found")
 
-            response = client.get('/api/v2/leak/source/50', data=json.dumps(payload), headers=default_header())
+            response = client.get('/api/v2/leak/email/50', data=json.dumps(payload), headers=default_header())
             self.assertEqual(response.status_code, 404)
-            self.assertTrue(response.json['Message'], "Leak Source ID not found")
+            self.assertTrue(response.json['Message'], "Mail ID not found")
 
-            response = client.delete('/api/v2/leak/source/50', data=json.dumps(payload), headers=default_header())
+            response = client.delete('/api/v2/leak/email/50', data=json.dumps(payload), headers=default_header())
             self.assertEqual(response.status_code, 404)
-            self.assertTrue(response.json['Message'], "Leak Source ID not found")
+            self.assertTrue(response.json['Message'], "Mail ID not found")

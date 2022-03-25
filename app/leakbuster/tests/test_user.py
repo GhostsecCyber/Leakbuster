@@ -108,6 +108,7 @@ class UserErrorsTest(ProjectTest):
         response = []
         with app.test_client() as client:
             response.append(client.put('/api/v2/user/50', data=json.dumps(payload), headers=default_header()))
+
             response.append(client.delete('/api/v2/user/50', headers=default_header()))
 
             for resp in response:

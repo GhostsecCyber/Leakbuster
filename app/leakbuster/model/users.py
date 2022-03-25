@@ -7,17 +7,18 @@ class UserMD(db.Model, BaseModel):
 
     __tablename__ = 'user'
 
-    name = db.Column(db.String(50), unique=True, nullable=False)
+    name = db.Column(db.String(3072), unique=True, nullable=False)
     password = db.Column(db.String(128), nullable=False)
-    roles = db.Column(db.String(6), nullable=False)
-    phone = db.Column(db.String(50), unique=True, nullable=False)
-    email = db.Column(db.String(100), unique=True, nullable=False)
-    company = db.Column(db.String(300), nullable=False)
-    cdomain = db.Column(db.String(300), unique=True, nullable=False)
-    site = db.Column(db.String(300), unique=True, nullable=False)
+    roles = db.Column(db.String(3072), nullable=False)
+    phone = db.Column(db.String(3072), unique=True, nullable=False)
+    email = db.Column(db.String(3072), unique=True, nullable=False)
+    company = db.Column(db.String(3072), nullable=False)
+    cdomain = db.Column(db.String(3072), unique=True, nullable=False)
+    site = db.Column(db.String(3072), unique=True, nullable=False)
 
     @property
     def serialized(self):
+        self.read()
         return {
             'id': self.id,
             'username': self.name,

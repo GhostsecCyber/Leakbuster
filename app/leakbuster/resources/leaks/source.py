@@ -1,4 +1,3 @@
-from app.leakbuster import db
 from flask import abort
 from app.leakbuster.model import LeakSourceMD
 import sqlalchemy
@@ -17,8 +16,7 @@ class Source:
                 author=request.json['author']
             )
 
-            db.session.add(leak_source)
-            db.session.commit()
+            leak_source.commit()
         except sqlalchemy.exc.IntegrityError as e:
             abort(500)
         except KeyError:
@@ -41,8 +39,7 @@ class Source:
 
     def delete_leak(self, id):
         source = LeakSourceMD.query.get_or_404(id, description="Leak Source ID not found")
-        db.session.delete(source)
-        db.session.commit()
+        source.delete()
         return {
             "Status": "Success",
             "Message": "Leak Successfully deleted"
@@ -57,8 +54,7 @@ class Source:
         source.author = request.json['author']
 
         try:
-            db.session.add(source)
-            db.session.commit()
+            source.commit()
         except sqlalchemy.exc.IntegrityError:
             abort(500, "Something went wrong, verify user data and try again")
         return {
