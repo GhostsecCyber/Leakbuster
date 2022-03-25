@@ -6,10 +6,10 @@ class LeakSourceMD(db.Model, BaseModel):
 
     __tablename__ = 'leakSource'
 
-    url = db.Column(db.String(200), unique=True)
-    date = db.Column(db.String(200))
-    description = db.Column(db.String(400))
-    author = db.Column(db.String(200))
+    url = db.Column(db.String(3072), unique=True)
+    date = db.Column(db.String(3072))
+    description = db.Column(db.String(3072))
+    author = db.Column(db.String(3072))
 
     general = db.relationship('LeakGeneralMD')
     leak_emails = db.relationship('LeakEmailMD')
@@ -17,15 +17,16 @@ class LeakSourceMD(db.Model, BaseModel):
 
     @property
     def serialized(self):
+        self.read()
         return {
             'id': self.id,
             'url': self.url,
             'date': self.date,
             'description': self.description,
             'author': self.author,
-            'general': self.general,
-            'leak_emails': self.leak_emails,
-            'leak_password': self.leak_password,
+            'general': [x.serialized for x in self.general],
+            'leak_emails': [x.serialized for x in self.leak_emails],
+            'leak_password': [x.serialized for x in self.leak_password],
             'created': self.created,
             'updated': self.updated
 

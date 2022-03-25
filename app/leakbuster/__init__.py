@@ -18,6 +18,12 @@ def favicon():
     return send_from_directory(os.path.join(app.root_path, 'static'), 'img/Leaker.ico')
 
 
+@app.after_request
+def close_sessions(request):
+    db.session.close_all()
+    return request
+
+
 from app.leakbuster.resources.endpoints import *
 from app.leakbuster.resources.frontend import *
 

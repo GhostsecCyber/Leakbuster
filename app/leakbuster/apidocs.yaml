@@ -12,6 +12,10 @@ tags:
   description: "Users endpoints handlers"
 - name: "Leaks Source"
   description: "Leaks sources endpoints handlers"
+- name: "Leaks Emails"
+  description: "Leaks Email endpoints handlers"
+- name: "General"
+  description: "Leak content endpoints handlers"
 
 paths:
   /user/:
@@ -278,6 +282,244 @@ paths:
           description: "Leak source not found"
         "500":
           description: "Message: Sorry, something went wrong on our side"
+  /leak/email:
+    get:
+      tags:
+        - "Leaks Emails"
+      summary: "Retrieve leak sources"
+      description: "[admin, script] Return data from all leak sources"
+      operationId: "viewLEmail"
+      consumes:
+        - "application/json"
+      produces:
+        - "application/json"
+      responses:
+        "200":
+          description: "Success"
+        "401":
+          description: "Unauthorized Access"
+        "500":
+          description: "Message: Sorry, something went wrong on our side"
+    post:
+      tags:
+        - "Leaks Emails"
+      summary: "Register a new leak source"
+      description: "[admin, script] Register a new Leak on the app"
+      operationId: "addLEmail"
+      consumes:
+        - "application/json"
+      produces:
+        - "application/json"
+      parameters:
+        - in: "body"
+          name: "body"
+          description: "Leak Source parameters that need to be defined in body request"
+          required: true
+          schema:
+            $ref: "#/definitions/Leak Email"
+      responses:
+        "200":
+          description: "Success"
+        "400":
+          description: "Message: Bad request message"
+        "401":
+          description: "Unauthorized Access"
+        "500":
+          description: "Message: Sorry, something went wrong on our side"
+  /leak/email/{MailId}:
+    get:
+      tags:
+        - "Leaks Emails"
+      summary: "View Unique leak source"
+      description: "[admin, script] Return data from requested leak source"
+      operationId: "getLMail"
+      consumes:
+        - "application/json"
+      produces:
+        - "application/json"
+      parameters:
+        - name: "MailId"
+          in: "path"
+          description: "Mail id that need to be defined in request"
+          required: true
+          type: "string"
+      responses:
+        "200":
+          description: "Success"
+        "400":
+          description: "Message: Bad request message"
+        "401":
+          description: "Unauthorized Access"
+        "404":
+          description: "Mail ID not found"
+        "500":
+          description: "Message: Sorry, something went wrong on our side"
+    put:
+      tags:
+        - "Leaks Emails"
+      summary: "Update an existing leak source"
+      description: "[admin, script] Update leak source information"
+      operationId: "updateLEmail"
+      consumes:
+        - "application/json"
+      produces:
+        - "application/json"
+      parameters:
+        - name: "MailId"
+          in: "path"
+          description: "Mail id that need to be defined in request"
+          required: true
+          type: "string"
+        - in: "body"
+          name: "Body"
+          description: "Mail parameters that need to be defined in body request"
+          required: true
+          schema:
+            $ref: "#/definitions/Leak Email"
+      responses:
+        "200":
+          description: "Success"
+        "400":
+          description: "Message: Bad request message"
+        "401":
+          description: "Unauthorized Access"
+        "404":
+          description: "Leak source not found"
+        "500":
+          description: "Message: Sorry, something went wrong on our side"
+    delete:
+      tags:
+        - "Leaks Emails"
+      summary: "Delete an existing Email"
+      description: "[admin, script]"
+      operationId: "deleteLMail"
+      consumes:
+        - "application/json"
+      produces:
+        - "application/json"
+      parameters:
+        - name: "MailId"
+          in: "path"
+          description: "Mail id that need to be defined in request"
+          required: true
+          type: "string"
+      responses:
+        "200":
+          description: "Success"
+        "400":
+          description: "Message: Bad request message"
+        "401":
+          description: "Unauthorized Access"
+        "404":
+          description: "Leak source not found"
+        "500":
+          description: "Message: Sorry, something went wrong on our side"
+  /wordlist:
+    get:
+      tags:
+        - "Wordlist"
+      summary: "Retrieve complete wordlist from leakbuster"
+      description: "[admin] Retrieve complete wordlist captured by leakbuster scripts"
+      operationId: "getWordlist"
+      consumes:
+        - "application/json"
+      produces:
+        - "application/json"
+      responses:
+        "200":
+          description: "Success"
+        "401":
+          description: "Unauthorized Access"
+        "500":
+          description: "Message: Sorry, something went wrong on our side"
+    post:
+      tags:
+        - "Wordlist"
+      summary: "Add a password to leakbuster wordlist"
+      description: "[admin, script] Add a password from leakbuster scripts to wordlist"
+      operationId: "addWordlist"
+      consumes:
+        - "application/json"
+      produces:
+        - "application/json"
+      parameters:
+        - in: "body"
+          name: "body"
+          description: "Wordlist parameters that need to be defined in body request"
+          required: true
+          schema:
+            $ref: "#/definitions/Wordlist"
+      responses:
+        "200":
+          description: "Success"
+        "400":
+          description: "Message: Bad request message"
+        "401":
+          description: "Unauthorized Access"
+        "500":
+          description: "Message: Sorry, something went wrong on our side"
+  /leak/general:
+    get:
+      tags:
+        - "General"
+      summary: "Retrieve all file location to leak contents"
+      description: "[admin] Get all file location to leak contents captured by leakbuster scripts"
+      operationId: "getContent"
+      consumes:
+        - "application/json"
+      produces:
+        - "application/json"
+      responses:
+        "200":
+          description: "Success"
+        "401":
+          description: "Unauthorized Access"
+        "500":
+          description: "Message: Sorry, something went wrong on our side"
+    post:
+      tags:
+        - "General"
+      summary: "Check URL to store page content"
+      description: "[admin, script] Check URL to store page content"
+      operationId: "addContent"
+      consumes:
+        - "application/json"
+      produces:
+        - "application/json"
+      parameters:
+        - in: "body"
+          name: "body"
+          description: "Parameters that need to be defined in body request"
+          required: true
+          schema:
+            $ref: "#/definitions/Wordlist"
+      responses:
+        "200":
+          description: "Success"
+        "400":
+          description: "Message: Bad request message"
+        "401":
+          description: "Unauthorized Access"
+        "500":
+          description: "Message: Sorry, something went wrong on our side"
+  /leak/general/{ContentId}:
+    get:
+      tags:
+        - "General"
+      summary: "Retrieve file location from a leak contents"
+      description: "[admin] Retrieve file location from a leak contents captured by leakbuster scripts"
+      operationId: "getContent2"
+      consumes:
+        - "application/json"
+      produces:
+        - "application/json"
+      responses:
+        "200":
+          description: "Success"
+        "401":
+          description: "Unauthorized Access"
+        "500":
+          description: "Message: Sorry, something went wrong on our side"
 
 definitions:
   User:
@@ -323,6 +565,38 @@ definitions:
       description:
         type: "string"
       author:
+        type: "string"
+  Leak Email:
+    type: "object"
+    required:
+      - "email"
+      - "leak_id"
+      - "leak_password"
+    properties:
+      email:
+        type: "string"
+      leak_id:
+        type: "string"
+      leak_password:
+        type: "string"
+  Wordlist:
+    type: "object"
+    required:
+      - "password"
+    properties:
+      password:
+        type: "array"
+        items:
+          type: "string"
+  Leak Content:
+    type: "object"
+    required:
+      - "url"
+      - "leak_id"
+    properties:
+      url:
+        type: "string"
+      leak_id:
         type: "string"
 
 securityDefinitions:

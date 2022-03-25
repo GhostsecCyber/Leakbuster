@@ -12,6 +12,7 @@ class ValidatedEmailsMD(db.Model, BaseModel):
 
     @property
     def serialized(self):
+        self.read()
         return {
             'id': self.id,
             'valid_email': self.valid_email,

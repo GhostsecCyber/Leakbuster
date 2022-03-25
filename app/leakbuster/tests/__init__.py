@@ -1,8 +1,9 @@
 import os
 from flask_testing import TestCase
 from app.leakbuster import app, db
-from app.leakbuster.model import UserMD, LeakSourceMD
+from app.leakbuster.model import UserMD, LeakSourceMD, LeakEmailMD, LeakPasswordMD, LeakGeneralMD
 from app.leakbuster.resources.users import User
+from app.leakbuster.crypt import encrypt, decrypt
 import base64
 import uuid
 
@@ -19,8 +20,7 @@ def add_testing_update_user():
         site='http://test.com'
     )
     user.hash_password('test')
-    db.session.add(user)
-    db.session.commit()
+    user.commit()
 
     return user.id
 
@@ -33,10 +33,43 @@ def add_testing_update_leak_source():
         date='unit_test',
         author='unit_test'
     )
-    db.session.add(leak_source)
-    db.session.commit()
+    leak_source.commit()
 
     return leak_source.id
+
+
+def add_testing_update_leak_email():
+    leak_id = add_testing_update_leak_source()
+    leak_email = LeakEmailMD(
+        email='unit_test_mail@mail.com',
+        leak_id=leak_id
+    )
+
+    password_leak = LeakPasswordMD(
+        leak_id=leak_id,
+        leak_password="test"
+    )
+    leak_email.leak_password.append(password_leak)
+    leak_email.commit()
+
+    return leak_email.id, leak_id
+
+
+def add_testing_general_leak():
+    leak_id = add_testing_update_leak_source()
+
+    with open(f"{os.getcwd()}\\leakbuster\\downloads\\text.txt", 'wt') as arq:
+        arq.write('test')
+    arq.close()
+
+    general = LeakGeneralMD(
+        leaks=f"{os.getcwd()}\\leakbuster\\downloads\\text.txt",
+        leak_id=leak_id
+    )
+
+    general.commit()
+
+    return general.id
 
 
 def add_testing_user():

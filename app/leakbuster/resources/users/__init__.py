@@ -1,10 +1,11 @@
-from app.leakbuster import db
 from flask import abort, request, g
 from functools import wraps
 from app.leakbuster.model import UserMD
 from app.leakbuster.utils import is_user_or_is_admin
+from app.leakbuster.crypt import encrypt
 import sqlalchemy
 import os
+import uuid
 
 
 def login_required(roles=[]):
@@ -20,7 +21,8 @@ def login_required(roles=[]):
                         except KeyError:
                             pass
                     return func(*args, **kwargs)
-                abort(401)
+                else:
+                    abort(401)
         return wrap
     return wrapper
 
@@ -42,8 +44,7 @@ class User:
             )
             user.hash_password(request.json['password'])
 
-            db.session.add(user)
-            db.session.commit()
+            user.commit()
         except sqlalchemy.exc.IntegrityError as e:
             abort(500)
         except KeyError:
@@ -66,8 +67,7 @@ class User:
 
     def delete_user(self, id):
         user = UserMD.query.get_or_404(id, description="User ID not found")
-        db.session.delete(user)
-        db.session.commit()
+        user.delete()
         return {
             "Status": "Success",
             "Message": "User Successfully deleted"
@@ -85,8 +85,7 @@ class User:
         user.hash_password(request.json['password'])
 
         try:
-            db.session.add(user)
-            db.session.commit()
+            user.commit()
         except sqlalchemy.exc.IntegrityError:
             abort(500, "Something went wrong, verify user data and try again")
         return {
@@ -98,8 +97,9 @@ class User:
     def get_user_for_auth(self, username):
 
         try:
-            user = UserMD.query.filter_by(name=username).first()
+            user = UserMD.query.filter_by(name=encrypt(username)).first()
             if user:
+                user.read()
                 g.user = user
                 return user
         except sqlalchemy.exc.IntegrityError:
@@ -108,8 +108,9 @@ class User:
 
     def create_admin(self):
         try:
-            if not UserMD.query.filter_by(name=os.environ.get('ADMIN_USER', 'admin')).first():
+            if not UserMD.query.filter_by(name=encrypt(os.environ.get('ADMIN_USER', 'admin'))).first():
                 user = UserMD(
+                    id=uuid.uuid4().hex,
                     name=os.environ.get('ADMIN_USER', 'admin'),
                     roles='admin',
                     phone='11999999999',
@@ -119,8 +120,7 @@ class User:
                     site='https://GhostSecCyber.com.br'
                 )
                 user.hash_password(os.environ.get('ADMIN_PASS'))
-                db.session.add(user)
-                db.session.commit()
+                user.commit()
                 return user
         except sqlalchemy.exc.OperationalError:
             return
@@ -129,8 +129,9 @@ class User:
 
     def create_script_user(self):
         try:
-            if not UserMD.query.filter_by(roles='script').first():
+            if not UserMD.query.filter_by(roles=encrypt('script')).first():
                 user = UserMD(
+                    id=uuid.uuid4().hex,
                     name=os.environ.get('SCRIPT_USER', 'script'),
                     roles='script',
                     phone='99999999999',
@@ -140,8 +141,7 @@ class User:
                     site='https://leakbuster_script.com.br'
                 )
                 user.hash_password(os.environ.get('SCRIPT_PASS'))
-                db.session.add(user)
-                db.session.commit()
+                user.commit()
                 return user
         except sqlalchemy.exc.OperationalError:
             return
